@@ -1,11 +1,3 @@
-//
-//  AppDelegate.swift
-//  MapboxSwiftUIDemo
-//
-//  Created by Fabian Guerra Soto on 9/11/19.
-//  Copyright © 2019 Mapbox. All rights reserved.
-//
-
 import UIKit
 
 @UIApplicationMain
