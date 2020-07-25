@@ -11,18 +11,23 @@ extension MGLPointAnnotation {
 
 struct MapView: UIViewRepresentable {
     @Binding var annotations: [MGLPointAnnotation]
-    
-    private let mapView: MGLMapView = MGLMapView(frame: .zero, styleURL: MGLStyle.streetsStyleURL)
+    @Binding var centerCoordinate: CLLocationCoordinate2D
+    @Binding var styleURL: URL
+    @Binding var zoomLevel: Double
     
     // MARK: - Configuring UIViewRepresentable protocol
-    
     func makeUIView(context: UIViewRepresentableContext<MapView>) -> MGLMapView {
+        let mapView = MGLMapView(frame: .zero, styleURL: MGLStyle.streetsStyleURL)
         mapView.delegate = context.coordinator
+
         return mapView
     }
     
     func updateUIView(_ uiView: MGLMapView, context: UIViewRepresentableContext<MapView>) {
-        updateAnnotations()
+        uiView.styleURL = styleURL
+        uiView.centerCoordinate = centerCoordinate
+        uiView.zoomLevel = zoomLevel
+        updateAnnotations(mapView: uiView)
     }
     
     func makeCoordinator() -> MapView.Coordinator {
@@ -31,22 +36,7 @@ struct MapView: UIViewRepresentable {
     
     // MARK: - Configuring MGLMapView
     
-    func styleURL(_ styleURL: URL) -> MapView {
-        mapView.styleURL = styleURL
-        return self
-    }
-    
-    func centerCoordinate(_ centerCoordinate: CLLocationCoordinate2D) -> MapView {
-        mapView.centerCoordinate = centerCoordinate
-        return self
-    }
-    
-    func zoomLevel(_ zoomLevel: Double) -> MapView {
-        mapView.zoomLevel = zoomLevel
-        return self
-    }
-    
-    private func updateAnnotations() {
+    private func updateAnnotations(mapView: MGLMapView) {
         if let currentAnnotations = mapView.annotations {
             mapView.removeAnnotations(currentAnnotations)
         }
@@ -56,10 +46,10 @@ struct MapView: UIViewRepresentable {
     // MARK: - Implementing MGLMapViewDelegate
     
     final class Coordinator: NSObject, MGLMapViewDelegate {
-        var control: MapView
+        var mapView: MapView
         
-        init(_ control: MapView) {
-            self.control = control
+        init(_ mapView: MapView) {
+            self.mapView = mapView
         }
         
         func mapView(_ mapView: MGLMapView, didFinishLoading style: MGLStyle) {
