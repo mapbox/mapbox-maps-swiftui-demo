@@ -5,7 +5,7 @@ target 'MapboxSwiftUIDemo' do
   use_frameworks!
 
   # Pods for MapboxSwiftUIDemo
-  pod 'Mapbox-iOS-SDK', '~> 5.3.0'
+  pod 'Mapbox-iOS-SDK', '~> 6.0.0'
 
   target 'MapboxSwiftUIDemoTests' do
     inherit! :search_paths

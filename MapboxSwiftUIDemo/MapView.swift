@@ -1,6 +1,16 @@
 import SwiftUI
 import Mapbox
 
+class CustomAnnotationView: MGLAnnotationView {
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        layer.cornerRadius = bounds.width / 2
+        layer.borderWidth = 2
+        layer.borderColor = UIColor.white.cgColor
+    }
+}
+
+
 extension MGLPointAnnotation {
     convenience init(title: String, coordinate: CLLocationCoordinate2D) {
         self.init()
@@ -85,7 +95,10 @@ struct MapView: UIViewRepresentable {
         }
         
         func mapView(_ mapView: MGLMapView, viewFor annotation: MGLAnnotation) -> MGLAnnotationView? {
-            return nil
+            let view = CustomAnnotationView(reuseIdentifier: "hello")
+            view.bounds = CGRect(origin: .zero, size: CGSize(width: 50.0, height: 50.0))
+            view.backgroundColor = .red
+            return view
         }
          
         func mapView(_ mapView: MGLMapView, annotationCanShowCallout annotation: MGLAnnotation) -> Bool {
